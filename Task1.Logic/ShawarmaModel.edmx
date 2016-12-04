@@ -1,0 +1,729 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище ShawarmaBaseModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Ingradient">
+          <Key>
+            <PropertyRef Name="IngradientId" />
+          </Key>
+          <Property Name="IngradientId" Type="int" Nullable="false" />
+          <Property Name="IngradientName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="TotalWeight" Type="int" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IngradientCategory">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="CategoryName" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="OrderHeaderId" />
+          </Key>
+          <Property Name="OrderHeaderId" Type="int" Nullable="false" />
+          <Property Name="ShawarmaId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderHeader">
+          <Key>
+            <PropertyRef Name="OrderHeaderId" />
+          </Key>
+          <Property Name="OrderHeaderId" Type="int" Nullable="false" />
+          <Property Name="OrderDate" Type="date" Nullable="false" />
+          <Property Name="SellerId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PriceController">
+          <Key>
+            <PropertyRef Name="PriceControllerId" />
+          </Key>
+          <Property Name="PriceControllerId" Type="int" Nullable="false" />
+          <Property Name="ShawarmaId" Type="int" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="SellingPointId" Type="int" Nullable="false" />
+          <Property Name="Comment" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Seller">
+          <Key>
+            <PropertyRef Name="SellerId" />
+          </Key>
+          <Property Name="SellerId" Type="int" Nullable="false" />
+          <Property Name="SellerName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="SellingPointId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SellingPoint">
+          <Key>
+            <PropertyRef Name="SellingPointId" />
+          </Key>
+          <Property Name="SellingPointId" Type="int" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="SellingPointCategoryId" Type="int" Nullable="false" />
+          <Property Name="ShawarmaTitle" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SellingPointCategory">
+          <Key>
+            <PropertyRef Name="SellingPointCategoryId" />
+          </Key>
+          <Property Name="SellingPointCategoryId" Type="int" Nullable="false" />
+          <Property Name="SellingPointCategoryName" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Shawarma">
+          <Key>
+            <PropertyRef Name="ShawarmaId" />
+          </Key>
+          <Property Name="ShawarmaId" Type="int" Nullable="false" />
+          <Property Name="ShawarmaName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="CookingTime" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ShawarmaRecipe">
+          <Key>
+            <PropertyRef Name="ShawarmaRecipeId" />
+          </Key>
+          <Property Name="ShawarmaRecipeId" Type="int" Nullable="false" />
+          <Property Name="ShawarmaId" Type="int" Nullable="false" />
+          <Property Name="IngradientId" Type="int" Nullable="false" />
+          <Property Name="Weight" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TimeController">
+          <Key>
+            <PropertyRef Name="TimeControllerId" />
+          </Key>
+          <Property Name="TimeControllerId" Type="int" Nullable="false" />
+          <Property Name="SellerId" Type="int" Nullable="false" />
+          <Property Name="WorkStart" Type="datetime" Nullable="false" />
+          <Property Name="WorkEnd" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="Ingradient_fk0">
+          <End Role="IngradientCategory" Type="Self.IngradientCategory" Multiplicity="1" />
+          <End Role="Ingradient" Type="Self.Ingradient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IngradientCategory">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Ingradient">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OrderDetails_fk0">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="OrderHeaderId" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="OrderHeaderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OrderDetails_fk1">
+          <End Role="Shawarma" Type="Self.Shawarma" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shawarma">
+              <PropertyRef Name="ShawarmaId" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="ShawarmaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OrderHeader_fk0">
+          <End Role="Seller" Type="Self.Seller" Multiplicity="1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seller">
+              <PropertyRef Name="SellerId" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PriceController_fk0">
+          <End Role="Shawarma" Type="Self.Shawarma" Multiplicity="1" />
+          <End Role="PriceController" Type="Self.PriceController" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shawarma">
+              <PropertyRef Name="ShawarmaId" />
+            </Principal>
+            <Dependent Role="PriceController">
+              <PropertyRef Name="ShawarmaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PriceController_fk1">
+          <End Role="SellingPoint" Type="Self.SellingPoint" Multiplicity="1" />
+          <End Role="PriceController" Type="Self.PriceController" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SellingPoint">
+              <PropertyRef Name="SellingPointId" />
+            </Principal>
+            <Dependent Role="PriceController">
+              <PropertyRef Name="SellingPointId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Seller_fk0">
+          <End Role="SellingPoint" Type="Self.SellingPoint" Multiplicity="1" />
+          <End Role="Seller" Type="Self.Seller" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SellingPoint">
+              <PropertyRef Name="SellingPointId" />
+            </Principal>
+            <Dependent Role="Seller">
+              <PropertyRef Name="SellingPointId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SellingPoint_fk0">
+          <End Role="SellingPointCategory" Type="Self.SellingPointCategory" Multiplicity="1" />
+          <End Role="SellingPoint" Type="Self.SellingPoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SellingPointCategory">
+              <PropertyRef Name="SellingPointCategoryId" />
+            </Principal>
+            <Dependent Role="SellingPoint">
+              <PropertyRef Name="SellingPointCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ShawarmaRecipe_fk0">
+          <End Role="Shawarma" Type="Self.Shawarma" Multiplicity="1" />
+          <End Role="ShawarmaRecipe" Type="Self.ShawarmaRecipe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shawarma">
+              <PropertyRef Name="ShawarmaId" />
+            </Principal>
+            <Dependent Role="ShawarmaRecipe">
+              <PropertyRef Name="ShawarmaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ShawarmaRecipe_fk1">
+          <End Role="Ingradient" Type="Self.Ingradient" Multiplicity="1" />
+          <End Role="ShawarmaRecipe" Type="Self.ShawarmaRecipe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingradient">
+              <PropertyRef Name="IngradientId" />
+            </Principal>
+            <Dependent Role="ShawarmaRecipe">
+              <PropertyRef Name="IngradientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TimeController_fk0">
+          <End Role="Seller" Type="Self.Seller" Multiplicity="1" />
+          <End Role="TimeController" Type="Self.TimeController" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seller">
+              <PropertyRef Name="SellerId" />
+            </Principal>
+            <Dependent Role="TimeController">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ShawarmaBaseModelContainer">
+          <EntitySet Name="Ingradient" EntityType="Self.Ingradient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IngradientCategory" EntityType="Self.IngradientCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderHeader" EntityType="Self.OrderHeader" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PriceController" EntityType="Self.PriceController" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Seller" EntityType="Self.Seller" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SellingPoint" EntityType="Self.SellingPoint" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SellingPointCategory" EntityType="Self.SellingPointCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Shawarma" EntityType="Self.Shawarma" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShawarmaRecipe" EntityType="Self.ShawarmaRecipe" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TimeController" EntityType="Self.TimeController" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="Ingradient_fk0" Association="Self.Ingradient_fk0">
+            <End Role="IngradientCategory" EntitySet="IngradientCategory" />
+            <End Role="Ingradient" EntitySet="Ingradient" />
+          </AssociationSet>
+          <AssociationSet Name="OrderDetails_fk0" Association="Self.OrderDetails_fk0">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="OrderDetails_fk1" Association="Self.OrderDetails_fk1">
+            <End Role="Shawarma" EntitySet="Shawarma" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="OrderHeader_fk0" Association="Self.OrderHeader_fk0">
+            <End Role="Seller" EntitySet="Seller" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="PriceController_fk0" Association="Self.PriceController_fk0">
+            <End Role="Shawarma" EntitySet="Shawarma" />
+            <End Role="PriceController" EntitySet="PriceController" />
+          </AssociationSet>
+          <AssociationSet Name="PriceController_fk1" Association="Self.PriceController_fk1">
+            <End Role="SellingPoint" EntitySet="SellingPoint" />
+            <End Role="PriceController" EntitySet="PriceController" />
+          </AssociationSet>
+          <AssociationSet Name="Seller_fk0" Association="Self.Seller_fk0">
+            <End Role="SellingPoint" EntitySet="SellingPoint" />
+            <End Role="Seller" EntitySet="Seller" />
+          </AssociationSet>
+          <AssociationSet Name="SellingPoint_fk0" Association="Self.SellingPoint_fk0">
+            <End Role="SellingPointCategory" EntitySet="SellingPointCategory" />
+            <End Role="SellingPoint" EntitySet="SellingPoint" />
+          </AssociationSet>
+          <AssociationSet Name="ShawarmaRecipe_fk0" Association="Self.ShawarmaRecipe_fk0">
+            <End Role="Shawarma" EntitySet="Shawarma" />
+            <End Role="ShawarmaRecipe" EntitySet="ShawarmaRecipe" />
+          </AssociationSet>
+          <AssociationSet Name="ShawarmaRecipe_fk1" Association="Self.ShawarmaRecipe_fk1">
+            <End Role="Ingradient" EntitySet="Ingradient" />
+            <End Role="ShawarmaRecipe" EntitySet="ShawarmaRecipe" />
+          </AssociationSet>
+          <AssociationSet Name="TimeController_fk0" Association="Self.TimeController_fk0">
+            <End Role="Seller" EntitySet="Seller" />
+            <End Role="TimeController" EntitySet="TimeController" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ShawarmaBaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Ingradient">
+          <Key>
+            <PropertyRef Name="IngradientId" />
+          </Key>
+          <Property Name="IngradientId" Type="Int32" Nullable="false" />
+          <Property Name="IngradientName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TotalWeight" Type="Int32" Nullable="false" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="IngradientCategory" Relationship="Self.Ingradient_fk0" FromRole="Ingradient" ToRole="IngradientCategory" />
+          <NavigationProperty Name="ShawarmaRecipe" Relationship="Self.ShawarmaRecipe_fk1" FromRole="Ingradient" ToRole="ShawarmaRecipe" />
+        </EntityType>
+        <EntityType Name="IngradientCategory">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="CategoryName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Ingradient" Relationship="Self.Ingradient_fk0" FromRole="IngradientCategory" ToRole="Ingradient" />
+        </EntityType>
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="OrderHeaderId" />
+          </Key>
+          <Property Name="OrderHeaderId" Type="Int32" Nullable="false" />
+          <Property Name="ShawarmaId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.OrderDetails_fk0" FromRole="OrderDetails" ToRole="OrderHeader" />
+          <NavigationProperty Name="Shawarma" Relationship="Self.OrderDetails_fk1" FromRole="OrderDetails" ToRole="Shawarma" />
+        </EntityType>
+        <EntityType Name="OrderHeader">
+          <Key>
+            <PropertyRef Name="OrderHeaderId" />
+          </Key>
+          <Property Name="OrderHeaderId" Type="Int32" Nullable="false" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="SellerId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.OrderDetails_fk0" FromRole="OrderHeader" ToRole="OrderDetails" />
+          <NavigationProperty Name="Seller" Relationship="Self.OrderHeader_fk0" FromRole="OrderHeader" ToRole="Seller" />
+        </EntityType>
+        <EntityType Name="PriceController">
+          <Key>
+            <PropertyRef Name="PriceControllerId" />
+          </Key>
+          <Property Name="PriceControllerId" Type="Int32" Nullable="false" />
+          <Property Name="ShawarmaId" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="SellingPointId" Type="Int32" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Shawarma" Relationship="Self.PriceController_fk0" FromRole="PriceController" ToRole="Shawarma" />
+          <NavigationProperty Name="SellingPoint" Relationship="Self.PriceController_fk1" FromRole="PriceController" ToRole="SellingPoint" />
+        </EntityType>
+        <EntityType Name="Seller">
+          <Key>
+            <PropertyRef Name="SellerId" />
+          </Key>
+          <Property Name="SellerId" Type="Int32" Nullable="false" />
+          <Property Name="SellerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SellingPointId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.OrderHeader_fk0" FromRole="Seller" ToRole="OrderHeader" />
+          <NavigationProperty Name="SellingPoint" Relationship="Self.Seller_fk0" FromRole="Seller" ToRole="SellingPoint" />
+          <NavigationProperty Name="TimeController" Relationship="Self.TimeController_fk0" FromRole="Seller" ToRole="TimeController" />
+        </EntityType>
+        <EntityType Name="SellingPoint">
+          <Key>
+            <PropertyRef Name="SellingPointId" />
+          </Key>
+          <Property Name="SellingPointId" Type="Int32" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SellingPointCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="ShawarmaTitle" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="PriceController" Relationship="Self.PriceController_fk1" FromRole="SellingPoint" ToRole="PriceController" />
+          <NavigationProperty Name="Seller" Relationship="Self.Seller_fk0" FromRole="SellingPoint" ToRole="Seller" />
+          <NavigationProperty Name="SellingPointCategory" Relationship="Self.SellingPoint_fk0" FromRole="SellingPoint" ToRole="SellingPointCategory" />
+        </EntityType>
+        <EntityType Name="SellingPointCategory">
+          <Key>
+            <PropertyRef Name="SellingPointCategoryId" />
+          </Key>
+          <Property Name="SellingPointCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="SellingPointCategoryName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="SellingPoint" Relationship="Self.SellingPoint_fk0" FromRole="SellingPointCategory" ToRole="SellingPoint" />
+        </EntityType>
+        <EntityType Name="Shawarma">
+          <Key>
+            <PropertyRef Name="ShawarmaId" />
+          </Key>
+          <Property Name="ShawarmaId" Type="Int32" Nullable="false" />
+          <Property Name="ShawarmaName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CookingTime" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.OrderDetails_fk1" FromRole="Shawarma" ToRole="OrderDetails" />
+          <NavigationProperty Name="PriceController" Relationship="Self.PriceController_fk0" FromRole="Shawarma" ToRole="PriceController" />
+          <NavigationProperty Name="ShawarmaRecipe" Relationship="Self.ShawarmaRecipe_fk0" FromRole="Shawarma" ToRole="ShawarmaRecipe" />
+        </EntityType>
+        <EntityType Name="ShawarmaRecipe">
+          <Key>
+            <PropertyRef Name="ShawarmaRecipeId" />
+          </Key>
+          <Property Name="ShawarmaRecipeId" Type="Int32" Nullable="false" />
+          <Property Name="ShawarmaId" Type="Int32" Nullable="false" />
+          <Property Name="IngradientId" Type="Int32" Nullable="false" />
+          <Property Name="Weight" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Ingradient" Relationship="Self.ShawarmaRecipe_fk1" FromRole="ShawarmaRecipe" ToRole="Ingradient" />
+          <NavigationProperty Name="Shawarma" Relationship="Self.ShawarmaRecipe_fk0" FromRole="ShawarmaRecipe" ToRole="Shawarma" />
+        </EntityType>
+        <EntityType Name="TimeController">
+          <Key>
+            <PropertyRef Name="TimeControllerId" />
+          </Key>
+          <Property Name="TimeControllerId" Type="Int32" Nullable="false" />
+          <Property Name="SellerId" Type="Int32" Nullable="false" />
+          <Property Name="WorkStart" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="WorkEnd" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Seller" Relationship="Self.TimeController_fk0" FromRole="TimeController" ToRole="Seller" />
+        </EntityType>
+        <Association Name="Ingradient_fk0">
+          <End Role="IngradientCategory" Type="Self.IngradientCategory" Multiplicity="1" />
+          <End Role="Ingradient" Type="Self.Ingradient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IngradientCategory">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Ingradient">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ShawarmaRecipe_fk1">
+          <End Role="Ingradient" Type="Self.Ingradient" Multiplicity="1" />
+          <End Role="ShawarmaRecipe" Type="Self.ShawarmaRecipe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingradient">
+              <PropertyRef Name="IngradientId" />
+            </Principal>
+            <Dependent Role="ShawarmaRecipe">
+              <PropertyRef Name="IngradientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OrderDetails_fk0">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="OrderHeaderId" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="OrderHeaderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OrderDetails_fk1">
+          <End Role="Shawarma" Type="Self.Shawarma" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shawarma">
+              <PropertyRef Name="ShawarmaId" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="ShawarmaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OrderHeader_fk0">
+          <End Role="Seller" Type="Self.Seller" Multiplicity="1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seller">
+              <PropertyRef Name="SellerId" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PriceController_fk0">
+          <End Role="Shawarma" Type="Self.Shawarma" Multiplicity="1" />
+          <End Role="PriceController" Type="Self.PriceController" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shawarma">
+              <PropertyRef Name="ShawarmaId" />
+            </Principal>
+            <Dependent Role="PriceController">
+              <PropertyRef Name="ShawarmaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PriceController_fk1">
+          <End Role="SellingPoint" Type="Self.SellingPoint" Multiplicity="1" />
+          <End Role="PriceController" Type="Self.PriceController" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SellingPoint">
+              <PropertyRef Name="SellingPointId" />
+            </Principal>
+            <Dependent Role="PriceController">
+              <PropertyRef Name="SellingPointId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Seller_fk0">
+          <End Role="SellingPoint" Type="Self.SellingPoint" Multiplicity="1" />
+          <End Role="Seller" Type="Self.Seller" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SellingPoint">
+              <PropertyRef Name="SellingPointId" />
+            </Principal>
+            <Dependent Role="Seller">
+              <PropertyRef Name="SellingPointId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TimeController_fk0">
+          <End Role="Seller" Type="Self.Seller" Multiplicity="1" />
+          <End Role="TimeController" Type="Self.TimeController" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seller">
+              <PropertyRef Name="SellerId" />
+            </Principal>
+            <Dependent Role="TimeController">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SellingPoint_fk0">
+          <End Role="SellingPointCategory" Type="Self.SellingPointCategory" Multiplicity="1" />
+          <End Role="SellingPoint" Type="Self.SellingPoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SellingPointCategory">
+              <PropertyRef Name="SellingPointCategoryId" />
+            </Principal>
+            <Dependent Role="SellingPoint">
+              <PropertyRef Name="SellingPointCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ShawarmaRecipe_fk0">
+          <End Role="Shawarma" Type="Self.Shawarma" Multiplicity="1" />
+          <End Role="ShawarmaRecipe" Type="Self.ShawarmaRecipe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shawarma">
+              <PropertyRef Name="ShawarmaId" />
+            </Principal>
+            <Dependent Role="ShawarmaRecipe">
+              <PropertyRef Name="ShawarmaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ShawarmaBaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Ingradient" EntityType="Self.Ingradient" />
+          <EntitySet Name="IngradientCategory" EntityType="Self.IngradientCategory" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" />
+          <EntitySet Name="OrderHeader" EntityType="Self.OrderHeader" />
+          <EntitySet Name="PriceController" EntityType="Self.PriceController" />
+          <EntitySet Name="Seller" EntityType="Self.Seller" />
+          <EntitySet Name="SellingPoint" EntityType="Self.SellingPoint" />
+          <EntitySet Name="SellingPointCategory" EntityType="Self.SellingPointCategory" />
+          <EntitySet Name="Shawarma" EntityType="Self.Shawarma" />
+          <EntitySet Name="ShawarmaRecipe" EntityType="Self.ShawarmaRecipe" />
+          <EntitySet Name="TimeController" EntityType="Self.TimeController" />
+          <AssociationSet Name="Ingradient_fk0" Association="Self.Ingradient_fk0">
+            <End Role="IngradientCategory" EntitySet="IngradientCategory" />
+            <End Role="Ingradient" EntitySet="Ingradient" />
+          </AssociationSet>
+          <AssociationSet Name="ShawarmaRecipe_fk1" Association="Self.ShawarmaRecipe_fk1">
+            <End Role="Ingradient" EntitySet="Ingradient" />
+            <End Role="ShawarmaRecipe" EntitySet="ShawarmaRecipe" />
+          </AssociationSet>
+          <AssociationSet Name="OrderDetails_fk0" Association="Self.OrderDetails_fk0">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="OrderDetails_fk1" Association="Self.OrderDetails_fk1">
+            <End Role="Shawarma" EntitySet="Shawarma" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="OrderHeader_fk0" Association="Self.OrderHeader_fk0">
+            <End Role="Seller" EntitySet="Seller" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="PriceController_fk0" Association="Self.PriceController_fk0">
+            <End Role="Shawarma" EntitySet="Shawarma" />
+            <End Role="PriceController" EntitySet="PriceController" />
+          </AssociationSet>
+          <AssociationSet Name="PriceController_fk1" Association="Self.PriceController_fk1">
+            <End Role="SellingPoint" EntitySet="SellingPoint" />
+            <End Role="PriceController" EntitySet="PriceController" />
+          </AssociationSet>
+          <AssociationSet Name="Seller_fk0" Association="Self.Seller_fk0">
+            <End Role="SellingPoint" EntitySet="SellingPoint" />
+            <End Role="Seller" EntitySet="Seller" />
+          </AssociationSet>
+          <AssociationSet Name="TimeController_fk0" Association="Self.TimeController_fk0">
+            <End Role="Seller" EntitySet="Seller" />
+            <End Role="TimeController" EntitySet="TimeController" />
+          </AssociationSet>
+          <AssociationSet Name="SellingPoint_fk0" Association="Self.SellingPoint_fk0">
+            <End Role="SellingPointCategory" EntitySet="SellingPointCategory" />
+            <End Role="SellingPoint" EntitySet="SellingPoint" />
+          </AssociationSet>
+          <AssociationSet Name="ShawarmaRecipe_fk0" Association="Self.ShawarmaRecipe_fk0">
+            <End Role="Shawarma" EntitySet="Shawarma" />
+            <End Role="ShawarmaRecipe" EntitySet="ShawarmaRecipe" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ShawarmaBaseModelContainer" CdmEntityContainer="ShawarmaBaseEntities">
+          <EntitySetMapping Name="Ingradient">
+            <EntityTypeMapping TypeName="ShawarmaBaseModel.Ingradient">
+              <MappingFragment StoreEntitySet="Ingradient">
+                <ScalarProperty Name="IngradientId" ColumnName="IngradientId" />
+                <ScalarProperty Name="IngradientName" ColumnName="IngradientName" />
+                <ScalarProperty Name="TotalWeight" ColumnName="TotalWeight" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IngradientCategory">
+            <EntityTypeMapping TypeName="ShawarmaBaseModel.IngradientCategory">
+              <MappingFragment StoreEntitySet="IngradientCategory">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="ShawarmaBaseModel.OrderDetails">
+              <MappingFragment StoreEntitySet="OrderDetails">
+                <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
+                <ScalarProperty Name="ShawarmaId" ColumnName="ShawarmaId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderHeader">
+            <EntityTypeMapping TypeName="ShawarmaBaseModel.OrderHeader">
+              <MappingFragment StoreEntitySet="OrderHeader">
+                <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="SellerId" ColumnName="SellerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PriceController">
+            <EntityTypeMapping TypeName="ShawarmaBaseModel.PriceController">
+              <MappingFragment StoreEntitySet="PriceController">
+                <ScalarProperty Name="PriceControllerId" ColumnName="PriceControllerId" />
+                <ScalarProperty Name="ShawarmaId" ColumnName="ShawarmaId" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="SellingPointId" ColumnName="SellingPointId" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Seller">
+            <EntityTypeMapping TypeName="ShawarmaBaseModel.Seller">
+              <MappingFragment StoreEntitySet="Seller">
+                <ScalarProperty Name="SellerId" ColumnName="SellerId" />
+                <ScalarProperty Name="SellerName" ColumnName="SellerName" />
+                <ScalarProperty Name="SellingPointId" ColumnName="SellingPointId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SellingPoint">
+            <EntityTypeMapping TypeName="ShawarmaBaseModel.SellingPoint">
+              <MappingFragment StoreEntitySet="SellingPoint">
+                <ScalarProperty Name="SellingPointId" ColumnName="SellingPointId" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="SellingPointCategoryId" ColumnName="SellingPointCategoryId" />
+                <ScalarProperty Name="ShawarmaTitle" ColumnName="ShawarmaTitle" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SellingPointCategory">
+            <EntityTypeMapping TypeName="ShawarmaBaseModel.SellingPointCategory">
+              <MappingFragment StoreEntitySet="SellingPointCategory">
+                <ScalarProperty Name="SellingPointCategoryId" ColumnName="SellingPointCategoryId" />
+                <ScalarProperty Name="SellingPointCategoryName" ColumnName="SellingPointCategoryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Shawarma">
+            <EntityTypeMapping TypeName="ShawarmaBaseModel.Shawarma">
+              <MappingFragment StoreEntitySet="Shawarma">
+                <ScalarProperty Name="ShawarmaId" ColumnName="ShawarmaId" />
+                <ScalarProperty Name="ShawarmaName" ColumnName="ShawarmaName" />
+                <ScalarProperty Name="CookingTime" ColumnName="CookingTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShawarmaRecipe">
+            <EntityTypeMapping TypeName="ShawarmaBaseModel.ShawarmaRecipe">
+              <MappingFragment StoreEntitySet="ShawarmaRecipe">
+                <ScalarProperty Name="ShawarmaRecipeId" ColumnName="ShawarmaRecipeId" />
+                <ScalarProperty Name="ShawarmaId" ColumnName="ShawarmaId" />
+                <ScalarProperty Name="IngradientId" ColumnName="IngradientId" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TimeController">
+            <EntityTypeMapping TypeName="ShawarmaBaseModel.TimeController">
+              <MappingFragment StoreEntitySet="TimeController">
+                <ScalarProperty Name="TimeControllerId" ColumnName="TimeControllerId" />
+                <ScalarProperty Name="SellerId" ColumnName="SellerId" />
+                <ScalarProperty Name="WorkStart" ColumnName="WorkStart" />
+                <ScalarProperty Name="WorkEnd" ColumnName="WorkEnd" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
